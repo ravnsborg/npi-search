@@ -28,6 +28,9 @@ class ApiService
 
     /**
      * Send a GET request to the API.
+     *
+     * @param  array<string, bool|float|int|string|null>  $queryParams
+     * @return array{success: true, data: list<array<string, mixed>>, count: int, error: null}|array{success: false, data: null, count: 0, error: string}
      */
     public function get(array $queryParams = [], int $limit = self::RESULTS_PER_REQUEST, int $skip = 0): array
     {

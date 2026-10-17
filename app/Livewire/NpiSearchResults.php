@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Services\ApiService;
 use Illuminate\Pagination\Paginator;
+use Illuminate\View\View;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,10 +13,12 @@ class NpiSearchResults extends Component
 {
     use WithPagination;
 
+    /** @var array<string, string> */
     public array $criteria = [];
 
+    /** @param array<string, string> $criteria */
     #[On('search-submitted')]
-    public function applySearch(array $criteria)
+    public function applySearch(array $criteria): void
     {
         $this->criteria = $criteria;
 
@@ -23,13 +26,13 @@ class NpiSearchResults extends Component
     }
 
     #[On('clear-results')]
-    public function clearResults()
+    public function clearResults(): void
     {
         $this->criteria = [];
         $this->resetPage();
     }
 
-    public function render()
+    public function render(): View
     {
         if (empty($this->criteria)) {
             return view('components.search-results', ['results' => null]);
@@ -58,7 +61,10 @@ class NpiSearchResults extends Component
         return view('components.search-results', compact('results'));
     }
 
-    // Standardize data to display
+    /**
+     * @param  list<array<string, mixed>>  $results
+     * @return list<array<string, mixed>>
+     */
     private function formatResults(array $results): array
     {
         return array_map(function (array $provider): array {

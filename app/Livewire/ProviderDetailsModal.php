@@ -8,10 +8,12 @@ use Livewire\Component;
 
 class ProviderDetailsModal extends Component
 {
+    /** @var array<string, mixed> */
     public array $provider = [];
 
     public bool $isOpen = false;
 
+    /** @param array<string, mixed> $provider */
     #[On('show-provider')]
     public function showProvider(array $provider): void
     {
