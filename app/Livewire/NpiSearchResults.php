@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Services\ApiService;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,7 +12,7 @@ class NpiSearchResults extends Component
 {
     use WithPagination;
 
-    public int $perPage = 50; // API max is 200
+    public int $perPage = 5; // API max is 200
 
     public array $criteria = [];
 
@@ -33,37 +33,26 @@ class NpiSearchResults extends Component
 
     public function render()
     {
-        // Don't hit the API until the user has searched
         if (empty($this->criteria)) {
             return view('components.search-results', ['results' => null]);
         }
 
         $page = $this->getPage();
-        $limit = min($this->perPage, 1200);
-        // $limit  = min($this->perPage, ApiService::RESULTS_PER_REQUEST);
-        $params = $this->criteria + [
-            'skip' => ($page - 1) * $limit,
-            'limit' => $limit,
-        ];
+        $limit = min(ApiService::RESULTS_PER_REQUEST, 199);
+        $skip = ($page - 1) * $limit;
 
-        $apiResponse = (new ApiService)->get($this->criteria);
+        $apiResponse = (new ApiService)->get($this->criteria, $limit + 1, $skip);
+
         if (! $apiResponse['success']) {
             $this->addError('search', 'The NPI Registry request failed. Please try again.');
 
-            return;
+            return view('components.search-results', ['results' => null]);
         }
 
-        $formattedData = $this->formatResults($apiResponse['data']);
+        $items = $this->formatResults($apiResponse['data']);
 
-        $data = [
-            'items' => $formattedData,
-            'total' => count($formattedData),
-            'criteria' => $this->criteria,
-        ];
-
-        $results = new LengthAwarePaginator(
-            $data['items'],
-            $data['total'],
+        $results = new Paginator(
+            $items,
             $limit,
             $page,
             ['path' => url()->current()],
