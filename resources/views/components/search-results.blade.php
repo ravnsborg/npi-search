@@ -1,4 +1,4 @@
-<main class="lg:col-span-8 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col justify-between overflow-hidden">
+<main class="lg:col-span-8 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col overflow-hidden">
 
     @if ($results !== null && ($results->hasMorePages() || $results->currentPage() > 1))
     <div class="px-4 py-3 border-t border-gray-200">
