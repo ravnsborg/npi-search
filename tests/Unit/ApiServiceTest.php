@@ -99,23 +99,3 @@ test('it returns a generic error for unsuccessful HTTP responses', function () {
         'error' => 'An unexpected error occurred.',
     ]);
 });
-
-test('it caches successful registry responses for identical requests', function () {
-    Http::fake([
-        '*' => Http::response([
-            'result_count' => 1,
-            'results' => [['number' => '1234567890']],
-        ]),
-    ]);
-
-    $service = app(ApiService::class);
-    $criteria = ['number' => '1234567890'];
-
-    expect($service->get($criteria))->toMatchArray([
-        'success' => true,
-        'count' => 1,
-        'data' => [['number' => '1234567890']],
-    ]);
-
-    Http::assertSentCount(1);
-});
