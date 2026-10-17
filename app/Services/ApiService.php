@@ -48,7 +48,7 @@ class ApiService
         ]);
 
         try {
-            $cacheKey = 'npi_search_'.md5(http_build_query($queryParams));
+            $cacheKey = 'npi_search_' . md5(http_build_query($queryParams));
 
             /** @var array{result_count?: int, results?: list<array<string, mixed>>, Errors?: list<array{description: string}>} $apiResponse */
             $apiResponse = Cache::remember($cacheKey, 3600, function () use ($queryParams) {
@@ -61,7 +61,7 @@ class ApiService
             if (isset($apiResponse['result_count'])) {
                 return [
                     'success' => true,
-                    'data' => $apiResponse['results'],
+                    'data' => $apiResponse['results'] ?? [],
                     'count' => (int) $apiResponse['result_count'],
                     'error' => null,
                 ];
@@ -76,6 +76,8 @@ class ApiService
 
                 throw new UnexpectedValueException($errorMessages);
             }
+
+            throw new UnexpectedValueException('Unexpected API response.');
         } catch (UnexpectedValueException $e) {
             report($e);
             $returnPayload['error'] = $e->getMessage();
