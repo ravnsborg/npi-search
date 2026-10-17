@@ -1,3 +1,4 @@
+<!-- Main Content: Search Results -->
 <main class="lg:col-span-8 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col overflow-hidden lg:h-0 lg:min-h-full">
 
     @if ($results !== null && ($results->hasMorePages() || $results->currentPage() > 1))
