@@ -1,18 +1,18 @@
-<main class="lg:col-span-8 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col overflow-hidden">
+<main class="lg:col-span-8 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col overflow-hidden lg:h-0 lg:min-h-full">
 
     @if ($results !== null && ($results->hasMorePages() || $results->currentPage() > 1))
-    <div class="px-4 py-3 border-t border-gray-200">
+    <div class="shrink-0 px-4 py-3 border-t border-gray-200">
         {{ $results->links() }}
     </div>
     @endif
-    <div class="overflow-x-auto">
+    <div class="flex-1 min-h-0 overflow-auto lg:max-h-none">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-gray-50 text-gray-700 uppercase text-xs tracking-wider border-b border-gray-200">
-                    <th class="py-3 px-4 font-semibold">NPI</th>
-                    <th class="py-3 px-4 font-semibold">Name</th>
-                    <th class="py-3 px-4 font-semibold">Primary Taxonomy</th>
-                    <th class="py-3 px-4 font-semibold">Address</th>
+                <tr class="text-gray-700 uppercase text-xs tracking-wider">
+                    <th class="sticky top-0 z-10 bg-gray-50 py-3 px-4 font-semibold shadow-[inset_0_-1px_0_#e5e7eb]">NPI</th>
+                    <th class="sticky top-0 z-10 bg-gray-50 py-3 px-4 font-semibold shadow-[inset_0_-1px_0_#e5e7eb]">Name</th>
+                    <th class="sticky top-0 z-10 bg-gray-50 py-3 px-4 font-semibold shadow-[inset_0_-1px_0_#e5e7eb]">Primary Taxonomy</th>
+                    <th class="sticky top-0 z-10 bg-gray-50 py-3 px-4 font-semibold shadow-[inset_0_-1px_0_#e5e7eb]">Address</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 text-sm text-gray-700">
@@ -43,7 +43,7 @@
         </table>
     </div>
     @if ($results !== null && ($results->hasMorePages() || $results->currentPage() > 1))
-    <div class="px-4 py-3 border-t border-gray-200">
+    <div class="shrink-0 px-4 py-3 border-t border-gray-200">
         {{ $results->links() }}
     </div>
     @endif
