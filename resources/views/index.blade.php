@@ -21,7 +21,7 @@
 
         <livewire:npi-search-form />
         <livewire:npi-search-results />
-
+        <livewire:provider-details-modal />
     </div>
 </body>
 
