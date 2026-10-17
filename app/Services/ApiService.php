@@ -48,7 +48,7 @@ class ApiService
         ]);
 
         try {
-            $cacheKey = 'npi_search_' . md5(http_build_query($queryParams));
+            $cacheKey = 'npi_search_'.md5(http_build_query($queryParams));
 
             /** @var array{result_count?: int, results?: list<array<string, mixed>>, Errors?: list<array{description: string}>} $apiResponse */
             $apiResponse = Cache::remember($cacheKey, 3600, function () use ($queryParams) {
