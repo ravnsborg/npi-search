@@ -1,4 +1,10 @@
 <main class="lg:col-span-8 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col justify-between overflow-hidden">
+
+    @if ($results !== null && ($results->hasMorePages() || $results->currentPage() > 1))
+    <div class="px-4 py-3 border-t border-gray-200">
+        {{ $results->links() }}
+    </div>
+    @endif
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
             <thead>
@@ -36,10 +42,10 @@
             </tbody>
         </table>
     </div>
-
     @if ($results !== null && ($results->hasMorePages() || $results->currentPage() > 1))
     <div class="px-4 py-3 border-t border-gray-200">
         {{ $results->links() }}
     </div>
     @endif
+
 </main>

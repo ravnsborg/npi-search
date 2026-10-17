@@ -6,7 +6,6 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Throwable;
 use UnexpectedValueException;
 
@@ -45,33 +44,15 @@ class ApiService
             'version' => $this->version,
         ]);
 
-        // $data = Cache::remember('search.' . md5(json_encode($params)), 60, function () use ($params) {
-        //     $res = Http::get('https://api.example.com/records', $params)->throw();
-
-        //     return [
-        //         'items' => $res->json('data'),
-        //         'total' => (int) $res->json('meta.total'),
-        //     ];
-        // });
-
         try {
-            $cacheParams = $queryParams;
-            ksort($cacheParams);
-            Log::info($cacheParams);
-            $cacheKey = 'npi_search_'.md5(http_build_query($cacheParams));
-            Log::info($cacheKey);
-            // if (Cache::has($cacheKey)) {
-            //     $apiResponse = Cache::get($cacheKey);
-            // } else {
-            Log::info('***NOT CACHED**');
+            $cacheKey = 'npi_search_'.md5(http_build_query($queryParams));
 
-            $apiResponse = $this->request()
-                ->get($this->baseUrl, $queryParams)
-                ->throw()
-                ->json();
-
-            //     Cache::put($cacheKey, $apiResponse, 3600);
-            // }
+            $apiResponse = Cache::remember($cacheKey, 3600, function () use ($queryParams) {
+                return $this->request()
+                    ->get($this->baseUrl, $queryParams)
+                    ->throw()
+                    ->json();
+            });
 
             if (isset($apiResponse['result_count'])) {
                 return [

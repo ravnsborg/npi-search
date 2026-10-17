@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Services\ApiService;
 use Illuminate\View\View;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -57,13 +56,15 @@ class NpiSearchForm extends Component
         // At least one search criterion must be provided.
         if (empty($populatedFormFields)) {
             $this->addError('search', 'Enter at least one search criterion.');
+            $this->dispatch('clear-results');
 
             return;
         }
 
         // State cannot be the only search criterion.
-        if (count($populatedFormFields) === 1 && isset($populatedFormFields['state'])) {
+        if (isset($populatedFormFields['state']) && count($populatedFormFields) === 1) {
             $this->addError('state', 'State cannot be the only search criterion.');
+            $this->dispatch('clear-results');
 
             return;
         }
@@ -77,21 +78,6 @@ class NpiSearchForm extends Component
         }
 
         $this->dispatch('search-submitted', criteria: $queryParameters);
-
-        // $apiResponse = (new ApiService)->get($queryParameters);
-
-        // if (! $apiResponse['success']) {
-        //     $this->addError('search', 'The NPI Registry request failed. Please try again.');
-
-        //     return;
-        // }
-
-        // $this->dispatch(
-        //     'npi-search-results',
-        //     results: $apiResponse['data'],
-        //     resultCount: $apiResponse['count'],
-        //     searchCriteria: $queryParameters,
-        // );
     }
 
     public function render(): View

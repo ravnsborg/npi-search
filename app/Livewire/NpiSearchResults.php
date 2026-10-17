@@ -12,8 +12,6 @@ class NpiSearchResults extends Component
 {
     use WithPagination;
 
-    public int $perPage = 5; // API max is 200
-
     public array $criteria = [];
 
     #[On('search-submitted')]
@@ -24,12 +22,12 @@ class NpiSearchResults extends Component
         $this->resetPage();
     }
 
-    // #[On('search-cleared')]
-    // public function clearSearch()
-    // {
-    //     $this->criteria = [];
-    //     $this->resetPage();
-    // }
+    #[On('clear-results')]
+    public function clearResults()
+    {
+        $this->criteria = [];
+        $this->resetPage();
+    }
 
     public function render()
     {
@@ -49,10 +47,8 @@ class NpiSearchResults extends Component
             return view('components.search-results', ['results' => null]);
         }
 
-        $items = $this->formatResults($apiResponse['data']);
-
         $results = new Paginator(
-            $items,
+            $this->formatResults($apiResponse['data']),
             $limit,
             $page,
             ['path' => url()->current()],
@@ -75,7 +71,6 @@ class NpiSearchResults extends Component
             $personName = collect([
                 $basic['name_prefix'] ?? null,
                 $basic['first_name'] ?? null,
-                $basic['middle_name'] ?? null,
                 $basic['last_name'] ?? null,
                 $basic['name_suffix'] ?? null,
             ])->filter()->implode(' ');
