@@ -42,7 +42,7 @@ class NpiSearchResults extends Component
         $limit = ApiService::RESULTS_PER_REQUEST;
         $skip = ($page - 1) * $limit;
 
-        // Increment limit to allow for pagination
+        // Call API Service. Incremented limit to return 1 more rec than page allows to validate a next page would exist.
         $apiResponse = (new ApiService)->get($this->criteria, $limit + 1, $skip);
 
         if (! $apiResponse['success']) {
